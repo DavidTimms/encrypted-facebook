@@ -76,12 +76,14 @@ var facebookOpenPGP = ({
 			console.log("yay! they have the extension");
 		} else {
 			console.log("Boo they don't have the extension");
+			if (document.querySelector('#enc_reply_label'))
 			facebookOpenPGP.hideEncryptedReplyButton();
 		}
 		})
 	},
 	hideEncryptedReplyButton: function () {
-		document.querySelector('#enc_reply_label').style.display = 'none';
+		if(document.querySelector('#enc_reply_label'))
+			encButton.style.display = 'none';
 	},
 	init: function () {
 		// initialise the extension in the page
