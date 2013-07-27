@@ -18,5 +18,8 @@
         "matches": ["https://www.facebook.com/messages/*", "http://www.facebook.com/messages/*"],
         "js": ["jquery-2.0.3.min.js", "content_page.js"]
         }
-      ]
+      ],
+    "options_page" : "encrypt-facebook-options.html"
+
+
 }

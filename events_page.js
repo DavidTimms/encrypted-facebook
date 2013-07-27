@@ -5,9 +5,8 @@ users[1] = {id: "david.timms.395"};
 
 
 function updatePageAction(tabId) {
-	chrome.tabs.sendMessage(tabId, {is_content_script: true}, function(response) {
-	if (response.is_content_script)
-		chrome.pageAction.show(tabId);
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  		chrome.tabs.sendMessage(tabId, {is_content_script: true})
 	});
 };
 
