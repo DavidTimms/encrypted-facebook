@@ -60,8 +60,19 @@ var facebookOpenPGP = ({
 				}
 			}
 		);
-		*/
+*/
 		//facebookOpenPGP.reply_label.innerButton.click();
+	},
+	checkIfRecipientHasExtension: function() {
+		chrome.runtime.sendMessage({type: "hasExtension", id: facebookOpenPGP.getFacebookID()}, function(response) {
+		if (response.hasExtension) {
+			facebookOpenPGP.init()
+			console.log("yay! they have the extension");
+		} else {
+			console.log("Boo they don't have the extension");
+			facebookOpenPGP.hideEncryptedReplyButton();
+		}
+	})
 	},
 	init: function () {
 		// initialise the extension in the page
@@ -72,20 +83,14 @@ var facebookOpenPGP = ({
 	}
 });
 
+// listeners
+if (window == top) {
+	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+		if (req.is_content_script)
+			facebookOpenPGP.checkIfRecipientHasExtension();
+		sendResponse({is_content_script: true});
+	});
+};
+
 // check if recipient has the extension
-chrome.runtime.sendMessage({type: "hasExtension", id: facebookOpenPGP.getFacebookID()}, function(response) {
-	if (response.hasExtension)
-	{
-		// inject buttons etc, get messages
-		facebookOpenPGP.init()
-		console.log("yay! they have the extension");
-	}
-	else
-	{
-		// do nothing
-		console.log("Boo they don't have the extension");
-	}
-})
-
-console.log("This is facebook messages!" + facebookOpenPGP.getFacebookID());
-
+facebookOpenPGP.checkIfRecipientHasExtension();
