@@ -61,7 +61,7 @@ var facebookOpenPGP = ({
 		var msg_box = facebookOpenPGP.getMessageBox();
 		//var enc = 'Encrypted Message: ' + msg_box.value;
 		//msg_box.value = enc;
-
+		
 		chrome.runtime.sendMessage(
 			{type: 'encryptMessage', message_text: msg_box.value},  
 			function (response) { // Callback function once encryption complete
@@ -73,6 +73,7 @@ var facebookOpenPGP = ({
 				}
 			}
 		);
+
 	},
 	checkIfRecipientHasExtension: function() {
 		chrome.runtime.sendMessage({type: "hasExtension", id: facebookOpenPGP.getFacebookID()}, function(response) {
