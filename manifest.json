@@ -4,8 +4,7 @@
   "description": "This extension encrypts facebook messages using PGP encryption.",
   "version": "1.0",
 
-  "background": 
-  {
+  "background": {
     "scripts": ["events_page.js"],
     "persistent": false
   },
@@ -18,5 +17,6 @@
       {
         "matches": ["https://www.facebook.com/messages/*", "http://www.facebook.com/messages/*"],
         "js": ["content_page.js"]
-        }]
+        }
+      ],
 }
