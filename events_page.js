@@ -4,7 +4,19 @@ users[0] = {id: "phil.mcmahon"};
 users[1] = {id: "david.timms.395"};
 
 
-console.log("POOH POOH POOH");
+function updatePageAction(tabId)
+{
+  chrome.tabs.sendMessage(tabId, {is_content_script: true}, function(response) {
+    if (response.is_content_script)
+      chrome.pageAction.show(tabId);
+  });
+};
+
+chrome.tabs.onUpdated.addListener(function(tabId, change, tab) {
+    if (change.status == "complete") {
+      updatePageAction(tabId);
+    }
+  });
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
