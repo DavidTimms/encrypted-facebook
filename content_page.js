@@ -94,7 +94,8 @@ var facebookOpenPGP = ({
 		})
 	},
 	hideEncryptedReplyButton: function () {
-		if(document.querySelector('#enc_reply_label'))
+		var encButton = document.querySelector('#enc_reply_label')
+		if(encButton)
 			encButton.style.display = 'none';
 	},
 	init: function () {
@@ -109,10 +110,9 @@ var facebookOpenPGP = ({
 
 // listeners
 if (window == top) {
-	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
+	chrome.runtime.onMessage.addListener(function(req, sender) {
 		if (req.is_content_script)
 			facebookOpenPGP.checkIfRecipientHasExtension();
-		sendResponse({is_content_script: true});
 	});
 };
 
