@@ -24,7 +24,6 @@ chrome.runtime.onMessage.addListener(
 		}
 		else if (request.type === "encryptedmessage")
 		{
-			event_obj[request.type]();
 			//sendResponse({decryptedmessage: "message"})
 		}
 		else if (request.type === "messageToEncrypt")
