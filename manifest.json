@@ -1,0 +1,17 @@
+{
+  "manifest_version": 2,
+  "name": "Encrypted Facebook",
+  "description": "This extension encrypts facebook messages using PGP encryption.",
+  "version": "1.0",
+
+  "background": 
+  {
+    "scripts": ["events.js"],
+    "persistent": false
+  },
+    "permissions": [
+      "tabs", 
+      "https://www.facebook.com/messages/*",
+      "http://www.facebook.com/messages/*"
+     ]
+}
