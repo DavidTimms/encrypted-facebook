@@ -18,5 +18,5 @@
         "matches": ["https://www.facebook.com/messages/*", "http://www.facebook.com/messages/*"],
         "js": ["content_page.js"]
         }
-      ],
+      ]
 }
