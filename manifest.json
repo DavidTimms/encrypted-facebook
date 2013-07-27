@@ -6,12 +6,17 @@
 
   "background": 
   {
-    "scripts": ["events.js"],
+    "scripts": ["events_page.js"],
     "persistent": false
   },
     "permissions": [
       "tabs", 
       "https://www.facebook.com/messages/*",
       "http://www.facebook.com/messages/*"
-     ]
+     ],
+    "content_scripts": [
+      {
+        "matches": ["https://www.facebook.com/messages/*", "http://www.facebook.com/messages/*"],
+        "js": ["content_page.js"]
+        }]
 }
