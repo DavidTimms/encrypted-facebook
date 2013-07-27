@@ -51,23 +51,28 @@ var facebookOpenPGP = ({
 		}
 
 	},
-	sendEncryptedMessage: function () {
-		console.log('sending encrypted');
-		var msg_box = facebookOpenPGP.getMessageBox();
-		var enc = 'Encrypted Message: ' + msg_box.value;
-		msg_box.value = enc;
+	sendEncryptedMessage: function (click_event) {
 
-		/*
+		// Stop automatic submission
+		if (click_event) {
+			click_event.preventDefault();
+		}
+
+		var msg_box = facebookOpenPGP.getMessageBox();
+		//var enc = 'Encrypted Message: ' + msg_box.value;
+		//msg_box.value = enc;
+
 		chrome.runtime.sendMessage(
 			{type: 'encryptMessage', message_text: msg_box.value},  
 			function (response) { // Callback function once encryption complete
 				if (!response.error) {
 					msg_box.value = response.encrypted_text;
+
+					// Click standard reply button to 
+					facebookOpenPGP.reply_label.innerButton.click();
 				}
 			}
 		);
-*/
-		//facebookOpenPGP.reply_label.innerButton.click();
 	},
 	checkIfRecipientHasExtension: function() {
 		chrome.runtime.sendMessage({type: "hasExtension", id: facebookOpenPGP.getFacebookID()}, function(response) {
