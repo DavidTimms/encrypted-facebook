@@ -16,7 +16,7 @@
     "content_scripts": [
       {
         "matches": ["https://www.facebook.com/messages/*", "http://www.facebook.com/messages/*"],
-        "js": ["content_page.js"]
+        "js": ["jquery-2.0.3.min.js", "content_page.js"]
         }
       ]
 }

@@ -49,8 +49,3 @@ chrome.runtime.onMessage.addListener(
 		}
 	}
 );
-
-/*
-users.forEach(function (user) {
-				if (user.id === request.id)
-				*/
