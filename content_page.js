@@ -32,17 +32,23 @@ var facebookOpenPGP = ({
 	addEncryptedReplyButton: function () {
 		// Add "Encrypted Reply" button to the page
 		console.log('Adding encrypted reply button');
-		var reply_label = this.getReplyLabel();
-		var enc_reply_label = reply_label.cloneNode(true);
-		enc_reply_label.id = 'enc_reply_label';
-		var enc_reply_button = enc_reply_label.children[0];
-		enc_reply_button.id = 'enc_reply_button';
-		enc_reply_button.value = 'Encrypted Reply';
-		enc_reply_button.type = 'button';
-		enc_reply_button.onclick = this.sendEncryptedMessage;
+		var reply_label = document.querySelector('#enc_reply_label');
+		if (reply_label) {
+			reply_label.style.display = '';
+		}
+		else {
+			reply_label = this.getReplyLabel();
+			var enc_reply_label = reply_label.cloneNode(true);
+			enc_reply_label.id = 'enc_reply_label';
+			var enc_reply_button = enc_reply_label.children[0];
+			enc_reply_button.id = 'enc_reply_button';
+			enc_reply_button.value = 'Encrypted Reply';
+			enc_reply_button.type = 'button';
+			enc_reply_button.onclick = this.sendEncryptedMessage;
 
-		parent_element = document.querySelector('._1r-');
-		parent_element.insertBefore(enc_reply_label, reply_label);
+			parent_element = document.querySelector('._1r-');
+			parent_element.insertBefore(enc_reply_label, reply_label);
+		}
 
 	},
 	sendEncryptedMessage: function () {
@@ -52,7 +58,7 @@ var facebookOpenPGP = ({
 		msg_box.value = enc;
 
 		/*
-		chrome.extension.sendMessage(
+		chrome.runtime.sendMessage(
 			{type: 'encryptMessage', message_text: msg_box.value},  
 			function (response) { // Callback function once encryption complete
 				if (!response.error) {
@@ -72,7 +78,10 @@ var facebookOpenPGP = ({
 			console.log("Boo they don't have the extension");
 			facebookOpenPGP.hideEncryptedReplyButton();
 		}
-	})
+		})
+	},
+	hideEncryptedReplyButton: function () {
+		document.querySelector('#enc_reply_label').style.display = 'none';
 	},
 	init: function () {
 		// initialise the extension in the page
@@ -83,6 +92,7 @@ var facebookOpenPGP = ({
 	}
 });
 
+
 // listeners
 if (window == top) {
 	chrome.runtime.onMessage.addListener(function(req, sender, sendResponse) {
@@ -91,6 +101,7 @@ if (window == top) {
 		sendResponse({is_content_script: true});
 	});
 };
+
 
 // check if recipient has the extension
 facebookOpenPGP.checkIfRecipientHasExtension();
