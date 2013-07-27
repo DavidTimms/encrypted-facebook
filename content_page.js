@@ -5,12 +5,14 @@ var facebookOpenPGP = ({
 	},
 	getFacebookID: function () {
 		// get facebook ID from the URL
-		var fb_id = window.location.pathname.substring(10);
+		if (!this.fb_id) {
+			this.fb_id = window.location.pathname.substring(10);
 
-		if (fb_id === 'a human readable facebook id') {
-			fb_id = this.getNumericFacebookID(fb_id);
+			if (this.fb_id === 'a human readable facebook id') {
+				this.fb_id = this.getNumericFacebookID(fb_id);
+			}
 		}
-		return fb_id;
+		return this.fb_id;
 	},
 	replaceEncryptedMessages: function () {
 		// find encrypted messages in the page and replace them
@@ -63,7 +65,11 @@ var facebookOpenPGP = ({
 		//msg_box.value = enc;
 		
 		chrome.runtime.sendMessage(
-			{type: 'encryptMessage', message_text: msg_box.value},  
+			{
+				type: 'encryptMessage', 
+				message_text: msg_box.value,
+				fb_id: facebookOpenPGP.getFacebookID()
+			},  
 			function (response) { // Callback function once encryption complete
 				if (!response.error) {
 					msg_box.value = response.encrypted_text;
