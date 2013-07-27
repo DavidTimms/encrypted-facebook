@@ -25,13 +25,21 @@ var facebookOpenPGP = ({
 		}
 		return this.message_box;
 	},
+	getReplyLabel: function () {
+		if (!this.reply_label) {
+			this.reply_label = document.querySelector('#js_2');
+			this.reply_label.innerButton = this.reply_label.children[0];
+		}
+		return this.reply_label;
+	},
 	addEncryptedReplyButton: function () {
 		// Add "Encrypted Reply" button to the page
 		console.log('Adding encrypted reply button');
-		var reply_label = document.querySelector("#js_2");
+		var reply_label = this.getReplyLabel();
 		var enc_reply_label = reply_label.cloneNode(true);
 		enc_reply_label.id = 'enc_reply_label';
 		var enc_reply_button = enc_reply_label.children[0];
+		enc_reply_button.id = 'enc_reply_button';
 		enc_reply_button.value = 'Encrypted Reply';
 		enc_reply_button.type = 'button';
 		enc_reply_button.onclick = this.sendEncryptedMessage;
@@ -41,7 +49,22 @@ var facebookOpenPGP = ({
 
 	},
 	sendEncryptedMessage: function () {
+		console.log('sending encrypted');
 		var msg_box = facebookOpenPGP.getMessageBox();
+		var enc = 'Encrypted Message: ' + msg_box.value;
+		msg_box.value = enc;
+
+		/*
+		chrome.extension.sendMessage(
+			{type: 'encryptMessage', message_text: msg_box.value},  
+			function (response) { // Callback function once encryption complete
+				if (!response.error) {
+					msg_box.value = response.encrypted_text;
+				}
+			}
+		);
+		*/
+		//facebookOpenPGP.reply_label.innerButton.click();
 	},
 	init: function () {
 		// initialise the extension in the page
