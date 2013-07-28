@@ -17,6 +17,47 @@ var facebookOpenPGP = ({
 	replaceEncryptedMessages: function () {
 		// find encrypted messages in the page and replace them
 		// with the decrypted contents
+		this.searchInNode('-----BEGIN PGP MESSAGE')
+			.forEach(function (node) {
+				chrome.runtime.sendMessage({
+					type: 'decryptMessage', 
+					enc_text: node.textContent
+				},  
+				function (response) { // Callback function once encryption complete
+					if (!response.error) {
+						var decrypted = response.decrypted_text;
+						console.log(decrypted);
+
+						// Replace encrypted message in page
+						node.textContent = decrypted;
+					}
+				});
+			});
+
+	},
+	searchInNode: function (query, node) {
+		var TEXT_NODE = 3;
+		var ELEMENT_NODE = 1;
+		if (!node) {
+			node = document.querySelector('._2nj');
+			this.searchInNode.enc_message_nodes = [];
+		}
+		if (node.hasChildNodes()) {
+			var child = node.firstChild;
+			while (child) {
+				if (child.nodeType === TEXT_NODE) {
+					var text = child.nodeValue;
+					if (text.indexOf(query) >= 0) {
+						this.searchInNode.enc_message_nodes.push(node.parentNode);
+					}
+				}
+				else if (child.nodeType === ELEMENT_NODE) {
+					this.searchInNode(query, child);
+				}
+				child = child.nextSibling;
+			}
+		}
+		return this.searchInNode.enc_message_nodes;
 	},
 	getMessageBox: function () {
 		if (!this.message_box) {
@@ -64,23 +105,21 @@ var facebookOpenPGP = ({
 		//var enc = 'Encrypted Message: ' + msg_box.value;
 		//msg_box.value = enc;
 		
-		chrome.runtime.sendMessage(
-			{
-				type: 'encryptMessage', 
-				message_text: msg_box.value,
-				fb_id: facebookOpenPGP.getFacebookID()
-			},  
-			function (response) { // Callback function once encryption complete
-				if (!response.error) {
-					var encrypted = response.encrypted_text;//.split('\\n').join('\n');
-					console.log(encrypted);
-					msg_box.value = encrypted;
+		chrome.runtime.sendMessage({
+			type: 'encryptMessage', 
+			message_text: msg_box.value,
+			fb_id: facebookOpenPGP.getFacebookID()
+		}, 
+		function (response) { // Callback function once encryption complete
+			if (!response.error) {
+				var encrypted = response.encrypted_text.split('\n').join('\n\n');
+				console.log(encrypted);
+				msg_box.value = encrypted;
 
-					// Click standard reply button to 
-					//facebookOpenPGP.reply_label.innerButton.click();
-				}
+				// Click standard reply button to send
+				facebookOpenPGP.reply_label.innerButton.click();
 			}
-		);
+		});
 
 	},
 	checkIfRecipientHasExtension: function() {
@@ -105,6 +144,7 @@ var facebookOpenPGP = ({
 		var fb_id = this.getFacebookID();
 		console.log(fb_id);
 		this.addEncryptedReplyButton();
+		this.replaceEncryptedMessages();
 		return this;
 	}
 });
