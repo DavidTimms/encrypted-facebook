@@ -72,10 +72,12 @@ var facebookOpenPGP = ({
 			},  
 			function (response) { // Callback function once encryption complete
 				if (!response.error) {
-					msg_box.value = response.encrypted_text;
+					var encrypted = response.encrypted_text;//.split('\\n').join('\n');
+					console.log(encrypted);
+					msg_box.value = encrypted;
 
 					// Click standard reply button to 
-					facebookOpenPGP.reply_label.innerButton.click();
+					//facebookOpenPGP.reply_label.innerButton.click();
 				}
 			}
 		);

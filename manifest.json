@@ -5,7 +5,7 @@
   "version": "1.0",
 
   "background": {
-    "scripts": ["openpgp.min.js", "events_page.js"],
+    "scripts": ["openpgp.js", "events_page.js"],
     "persistent": false
   },
     "permissions": [
