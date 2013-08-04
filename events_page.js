@@ -41,7 +41,6 @@ var facebookOpenPGPBackground = {
 	encryptMessage: function (request) {
 		var public_key = this.getPublicKey(request.fb_id);
 		var encrypted = openpgp.write_encrypted_message([public_key], request.message_text);
-		console.log(encrypted);
 		return {encrypted_text: encrypted};
 	},
 	decryptMessage: function (request) {
