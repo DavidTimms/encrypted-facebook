@@ -11,7 +11,8 @@
     "permissions": [
       "tabs", 
       "https://www.facebook.com/messages/*",
-      "http://www.facebook.com/messages/*"
+      "http://www.facebook.com/messages/*",
+      "storage"
      ],
     "content_scripts": [
       {
