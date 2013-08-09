@@ -23,14 +23,25 @@
 				<p> It would be a bit stupid to display this wouldn't it! </p>
 				<button id="deleteUserKey" type="submit" value="Delete Key">Delete Key</button>
 			</div>
+		<h2>Your friend's keys </h2>
+			<div id="friendList">
+				<ul id="friendListElements">
+					
+				</ul>
+			</div>
 		<h2> Add friend's public key </h2>
-	<form id="publicKeyForm" method="get">
-		<label>Public Key:</label><br>
-		<textarea id = "publickey" rows="20" cols="60" placeholder="Their public key"></textarea><br>
-		<button id="saveKey" type="submit" value="Save">Save</button>
-		<br>
-		<div id="keyImportStatus"></div>
-	</form>
+<!-- 			<form id="addFriend" method="get"> -->
+				<label>Facebook ID: </label>
+				<input id="friendFacebookId" type="text" placeholder="e.g. j.smith"><br>
+				<label>Public Key:</label><br>
+				<textarea id = "publickey" rows="20" cols="60" placeholder="Their public key"></textarea><br>
+				<button id="saveKey" type="submit" value="Save">Save</button>
+				<br>
+				<div id="keyImportStatus"></div>
+<!-- 			</form> -->
+		<h2> Delete keys </h2>
+			Delete all keys (including your own): 
+			<button id="deleteAllKeys" type="submit" value="Delete keys">Delete Keys</button>
 	</body>
 	<script src="openpgp.js"></script>
 	<script src="face-enc-options.js"></script>
