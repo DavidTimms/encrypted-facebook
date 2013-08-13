@@ -17,12 +17,15 @@ var facebookOpenPGP = ({
 	replaceEncryptedMessages: function () {
 		// find encrypted messages in the page and replace them
 		// with the decrypted contents
+		console.log('replacing encrypted messages');
 		this.searchInNode('-----BEGIN PGP MESSAGE')
 			.forEach(function (node) {
+				var message = node.textContent.replace('.org','.org\n\n');
+				console.log(message);
 				chrome.runtime.sendMessage({
 					type: 'decryptMessage', 
-					enc_text: node.textContent
-				},  
+					enc_text: message
+				}, 
 				function (response) { // Callback function once encryption complete
 					if (!response.error) {
 						var decrypted = response.decrypted_text;
@@ -112,7 +115,7 @@ var facebookOpenPGP = ({
 		}, 
 		function (response) { // Callback function once encryption complete
 			if (!response.error) {
-				var encrypted = response.encrypted_text.split('\n').join('\n\n');
+				var encrypted = response.enc_text;//split('\n').join('\n\n');
 				console.log(encrypted);
 				msg_box.value = encrypted;
 
@@ -144,7 +147,10 @@ var facebookOpenPGP = ({
 		var fb_id = this.getFacebookID();
 		console.log(fb_id);
 		this.addEncryptedReplyButton();
-		this.replaceEncryptedMessages();
+		setTimeout(function () {
+			facebookOpenPGP.replaceEncryptedMessages();
+		}, 2000);
+		//this.replaceEncryptedMessages();
 		return this;
 	}
 });

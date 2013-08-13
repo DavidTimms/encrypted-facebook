@@ -11,7 +11,6 @@ var dummy_keyring = {
 openpgp.init();
 
 console.log('background script started');
-console.log('config: ' + openpgp.config);
 
 function updatePageAction(tabId) {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -41,17 +40,30 @@ var facebookOpenPGPBackground = {
 	encryptMessage: function (request) {
 		var public_key = this.getPublicKey(request.fb_id);
 		var encrypted = openpgp.write_encrypted_message([public_key], request.message_text);
-		return {encrypted_text: encrypted};
+		this.decryptMessage({enc_text: encrypted});
+		return {enc_text: encrypted};
 	},
 	decryptMessage: function (request) {
-		var decrypted = 'Decrypted: ' + request.enc_text;
-		return {decrypted_text: decrypted};
+		var private_key = this.getMyPrivateKey();
+		console.log(private_key);
+		console.log(request.enc_text);
+		var pgp_message = openpgp.read_message(request.enc_text);
+		if (private_key && pgp_message && pgp_message[0]) {
+			pgp_message = pgp_message[0];
+			if (pgp_message.sessionKeys && pgp_message.sessionKeys[0]) {
+				console.log(pgp_message.sessionKeys.length);
+				var session_key = pgp_message.sessionKeys[0];
+				console.log(session_key);
+				var decrypted = pgp_message.decrypt(private_key, session_key);
+				return {decrypted_text: decrypted};
+			}
+		}
+		return {error: true};
 	},
 	getPublicKey: function (fb_id) {
 		// Query keyring to get public key associated 
 		// with the other user's facebook ID
 		var key_string = dummy_keyring.public_key;
-		console.log(key_string);
 		return openpgp.read_publicKey(key_string)[0];
 	},
 	getMyPrivateKey: function () {
@@ -60,8 +72,6 @@ var facebookOpenPGPBackground = {
 		return openpgp.read_privateKey(key_string)[0];
 	},
 };
-
-facebookOpenPGPBackground.getPublicKey();
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -76,3 +86,7 @@ chrome.runtime.onMessage.addListener(
 		}
 	}
 );
+
+function showMessages (text) {
+	console.log(text);
+}
