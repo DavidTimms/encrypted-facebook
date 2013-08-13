@@ -1,0 +1,23 @@
+body {
+	padding-bottom: 50px;
+	padding-top: 20px;
+	background-color: #fafafa;
+	max-width: 700px;
+}
+#publickeyform {
+	display:block;
+}
+
+ul {
+    list-style-type: none;
+}
+label {
+	margin-top: 15px;
+}
+input[type="text"] {
+	height: auto;
+	margin-bottom: 0px;
+}
+textarea {
+	width: 98%;
+}
