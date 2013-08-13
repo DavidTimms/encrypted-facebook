@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Facebook Encrypt Options</title>
+		<link rel="stylesheet" type="text/css" href="face-enc-options.css">
+	</head>
+
+	<body>
+		<h1> Facebook Encrypt Options </h1>
+		<h2> Your keys </h2>
+			<div id="generateKey">
+				<p> You don't have a key pair set up, please create one now. </p>
+				<label>Facebook ID:*</label>
+				<input id="userFacebookId" type="text" placeholder="Your facebook ID">
+				<button id="generateKeyButton" type="submit" value="Generate Key">Generate Key</button>
+				<br>
+				<div id="keyGenerateStatus"></div>
+			</div>
+			<div id="userKeys">
+				<div id="keyInfoText"></div>
+				<h3> Public Key: </h3>
+				<div id="userPublicKey"> </div>
+				<h3> Private Key: </h3>
+				<p> It would be a bit stupid to display this wouldn't it! </p>
+				<button id="deleteUserKey" type="submit" value="Delete Key">Delete Key</button>
+			</div>
+		<h2>Your friend's keys </h2>
+			<div id="friendList">
+				<ul id="friendListElements">
+					
+				</ul>
+			</div>
+		<h2> Add friend's public key </h2>
+<!-- 			<form id="addFriend" method="get"> -->
+				<label>Facebook ID: </label>
+				<input id="friendFacebookId" type="text" placeholder="e.g. j.smith"><br>
+				<label>Public Key:</label><br>
+				<textarea id = "publickey" rows="20" cols="60" placeholder="Their public key"></textarea><br>
+				<button id="saveKey" type="submit" value="Save">Save</button>
+				<br>
+				<div id="keyImportStatus"></div>
+<!-- 			</form> -->
+		<h2> Delete keys </h2>
+			Delete all keys (including your own): 
+			<button id="deleteAllKeys" type="submit" value="Delete keys">Delete Keys</button>
+	</body>
+	<script src="openpgp.js"></script>
+	<script src="face-enc-options.js"></script>
+</html>
