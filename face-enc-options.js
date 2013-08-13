@@ -1,36 +1,40 @@
 var facebookOpenPGPOptions = ({
 	userKeySet : false,
 	userFacebookEmail : "",
+
 	getUserPublicKey: function() {
 		if (userKeySet)
 			return openpgp.keyring.getPublicKeyForAddress(userFacebookEmail);
 		else
 			return "Key not set";
 	},
+
 	getUserPrivateKey: function() {
 		if (userKeySet)
 			return openpgp.keyring.getPrivateKeyForAddress(userFacebookEmail);
 		else
 			return "Key not set";
 	},
+
 	// this can be used with just the first parameter - checkIfUsernameInKeyList(username)
 	checkIfUsernameInKeyList: function(username, storageChecked, returnValue) {
 		if (storageChecked)
 			return returnValue;
 		chrome.storage.sync.get('friendList', function (result) {
-			if (result.friendList)
-			{
+			if (result.friendList) {
 				var friendList = result.friendList;
 				for (var i = 0; i < friendList.length; i++)
 					if (username === friendList[i].id)
 						facebookOpenPGPOptions.checkIfUser(username, true, true);
 				return facebookOpenPGPOptions.checkIfUser(username, true, false);
 			}
-		}					
+		});
 	},
+
 	getPublicKeyFromUserName: function(username) {
 		return openpgp.keyring.getPublicKeyForAddress(username + "@facebook.com");
 	},
+
 	addKey: function () {
 		var friendId = document.getElementById("friendFacebookId").value;
 		if (friendId == null || friendId.length < 1) {
@@ -74,11 +78,11 @@ var facebookOpenPGPOptions = ({
 		  	});
 		});
 	},
+
 	generateKey: function() {
 		var username = document.getElementById('userFacebookId').value;
 		var keyId;
-		if (username.length < 1)
-		{
+		if (username.length < 1) {
 			document.getElementById("keyGenerateStatus").innerHTML =
 			 "<p>Key generation failed - username at least 1 character</p>";
 			 return;
@@ -106,6 +110,7 @@ var facebookOpenPGPOptions = ({
 		document.getElementById("userPublicKey").innerHTML = "<p>" + newKey.publicKeyArmored + "</p>";
 		facebookOpenPGPOptions.loadUserDetailsAndInitFriendList();
 	},
+
 	deleteAllKeysInKeyring: function() {
 		console.log(openpgp.keyring.publicKeys.length);
 		while (openpgp.keyring.publicKeys.length > 0)
@@ -117,8 +122,7 @@ var facebookOpenPGPOptions = ({
 		chrome.storage.sync.remove("friendList", function(result) {
 			if (chrome.runtime.lastError)
 				console.log("Key list delete error");
-			else
-			{
+			else {
 				openpgp.keyring.store();
 				chrome.storage.sync.remove("facebookUsername", function(result) {
 				if (chrome.runtime.lastError)
@@ -132,6 +136,7 @@ var facebookOpenPGPOptions = ({
 			}
 		});
 	},
+
 	deleteFriend: function(e) {
 		console.log(openpgp.keyring.publicKeys.length)
 		var indexToDelete = e.srcElement.friendListIndex
@@ -151,10 +156,10 @@ var facebookOpenPGPOptions = ({
 			});
 		});
 	},
+
 	updateFriendList: function() {
 		chrome.storage.sync.get('friendList', function(result) {
-			if (result.friendList)
-			{
+			if (result.friendList) {
 				var friendList = result.friendList;
 				document.getElementById("friendListElements").innerHTML = "";
 				for (var i = 0; i < friendList.length; i++)
@@ -175,16 +180,16 @@ var facebookOpenPGPOptions = ({
 			}
 		});
 	},
+
 	loadUserDetailsAndInitFriendList: function() {
 		chrome.storage.sync.get('facebookUsername', function(result) {
-			if (result.facebookUsername)
-			{
+			if (result.facebookUsername) {
 				loadUserDetailsAndInitFriendList = true;
 				userFacebookEmail = result.facebookUsername + "@facebook.com";
 				document.getElementById('generateKey').style.display = 'none';
 				document.getElementById('userKeys').style.display = 'inline';
 				document.getElementById('keyInfoText').innerHTML =
-				 "<p> You have a key set up for username " + result.facebookUsername + ": </p>";
+				 "<p> You have a key set up for the username <b>" + result.facebookUsername + "</b></p>";
 				document.getElementById("userPublicKey").innerHTML = "<p>" +
 				 openpgp.keyring.getPublicKeyForAddress(userFacebookEmail)[0].armored + "</p>";
 			} 
@@ -192,19 +197,19 @@ var facebookOpenPGPOptions = ({
 				document.getElementById('userKeys').style.display = 'none';
 				document.getElementById('generateKey').style.display = 'inline';
 			}
-			if(chrome.runtime.lastError)
+			if (chrome.runtime.lastError)
 				console.log("Username check error");
 		});
 		chrome.storage.sync.get('friendList', function(result) {
 			if (result.friendList)
 				console.log("Friend list exists:" + result);
-			else
-			{
+			else {
 				console.log("Creating friend list");
 				chrome.storage.sync.set({"friendList" : new Array()});
 			}
 		});
 	},
+
 	init: function() {
 		this.loadUserDetailsAndInitFriendList();
 		openpgp.init();
@@ -218,4 +223,5 @@ var facebookOpenPGPOptions = ({
 		this.updateFriendList();
 		return this;
 	}
+
 }).init();

@@ -1,17 +1,21 @@
 <html>
 	<head>
 		<title>Facebook Encrypt Options</title>
-		<link rel="stylesheet" type="text/css" href="face-enc-options.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/face-enc-options.css">
 	</head>
 
-	<body>
+	<body class="container">
 		<h1> Facebook Encrypt Options </h1>
+		<hr>
 		<h2> Your keys </h2>
 			<div id="generateKey">
 				<p> You don't have a key pair set up, please create one now. </p>
-				<label>Facebook ID:*</label>
-				<input id="userFacebookId" type="text" placeholder="Your facebook ID">
-				<button id="generateKeyButton" type="submit" value="Generate Key">Generate Key</button>
+				<label for="userFacebookId">Facebook ID:*</label>
+				<div class="input-append">
+					<input class="input-xlarge" id="userFacebookId" type="text" placeholder="Your facebook ID">
+					<button class="btn" id="generateKeyButton" type="submit" value="Generate Key">Generate Key</button>
+				</div>
 				<br>
 				<div id="keyGenerateStatus"></div>
 			</div>
@@ -21,27 +25,31 @@
 				<div id="userPublicKey"> </div>
 				<h3> Private Key: </h3>
 				<p> It would be a bit stupid to display this wouldn't it! </p>
-				<button id="deleteUserKey" type="submit" value="Delete Key">Delete Key</button>
+				<button class="btn btn-danger" id="deleteUserKey" type="submit" value="Delete Key">Delete Key</button>
 			</div>
+		<hr>
 		<h2>Your friend's keys </h2>
 			<div id="friendList">
 				<ul id="friendListElements">
 					
 				</ul>
 			</div>
-		<h2> Add friend's public key </h2>
+		<hr>
+		<h2> Add a friend's public key </h2>
 <!-- 			<form id="addFriend" method="get"> -->
-				<label>Facebook ID: </label>
-				<input id="friendFacebookId" type="text" placeholder="e.g. j.smith"><br>
-				<label>Public Key:</label><br>
-				<textarea id = "publickey" rows="20" cols="60" placeholder="Their public key"></textarea><br>
-				<button id="saveKey" type="submit" value="Save">Save</button>
+				<label for="friendFacebookId">Facebook ID: </label>
+				<input class="input-xlarge" id="friendFacebookId" type="text" placeholder="e.g. j.smith"><br>
+				<label for="publickey">Public Key:</label>
+				<textarea id="publickey" rows="20" cols="80" placeholder="Their public key"></textarea><br>
+				<button class="btn" id="saveKey" type="submit" value="Add Key">Add Key</button>
 				<br>
 				<div id="keyImportStatus"></div>
 <!-- 			</form> -->
+		<hr>
 		<h2> Delete keys </h2>
-			Delete all keys (including your own): 
-			<button id="deleteAllKeys" type="submit" value="Delete keys">Delete Keys</button>
+			
+			<button class="btn btn-danger" id="deleteAllKeys" type="submit" value="Delete keys">Delete All Keys</button>
+			(including your own)
 	</body>
 	<script src="openpgp.js"></script>
 	<script src="face-enc-options.js"></script>
